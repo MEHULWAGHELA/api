@@ -2,8 +2,8 @@ import React, { Fragment, useState } from 'react'
 import axios from 'axios'
 import { Col, Container, Form, FormGroup, Input, Label, Row } from 'reactstrap'
 const Api = () => {
-    let [arr, setarr] = useState()
-
+    let [arr, setarr] = useState([])
+    let [obj, setobj] = useState({})
     const setdata = () => {
         axios.get('https://student-api.mycodelibraries.com/api/student/get')
             .then((res) => {
@@ -17,21 +17,33 @@ const Api = () => {
         e.preventDefault();
         setdata()
     }
+    const changeData = (e) => {
+        if (e.target.name == "hobbies") {
+            if (e.target.checked) {
+                obj[e.target.name] = [e.target.value]
+            }
+            else {
+
+            }
+        }
+        else {
+            obj[e.target.name] = e.target.value
+        }
+        setobj({ ...obj })
+        console.log(obj)
+    }
     return (
         <div>
-            {arr?.map((x, i) => {
-                return <h4 key={i}>{x.firstName}</h4>
 
-            })}
             <Row>
                 <Col xs={6} className="offset-3">
                     <Container className="mt-1 py-1 px-4 border border-1 border-black rounded-2 shadow-lg">
-                        <h1 className="text-center py-3">Employee Form</h1>
+                        <h1 className="text-center py-3">Student Form</h1>
                         <Form onSubmit={(e) => { submitFunction(e) }}>
                             <Row>
                                 <Col md={6}>
                                     <FormGroup>
-                                        <Label for="firstName" className="fw-600 fs-5">
+                                        <Label for="firstName" className="fw-600">
                                             First Name
                                         </Label>
                                         <Input
@@ -40,12 +52,13 @@ const Api = () => {
                                             placeholder=""
                                             type="text"
                                             className="main"
+                                            onChange={changeData}
                                         />
                                     </FormGroup>
                                 </Col>
                                 <Col md={6}>
                                     <FormGroup>
-                                        <Label for="lastName" className="fw-600 fs-5">
+                                        <Label for="lastName" className="fw-600 ">
                                             last Name
                                         </Label>
                                         <Input
@@ -54,12 +67,14 @@ const Api = () => {
                                             placeholder=""
                                             type="text"
                                             className="main"
+                                            onChange={changeData}
+
                                         />
                                     </FormGroup>
                                 </Col>
                                 <Col md={6}>
                                     <FormGroup>
-                                        <Label for="age" className="fw-600 fs-5">
+                                        <Label for="age" className="fw-600 ">
                                             User Name
                                         </Label>
                                         <Input
@@ -68,11 +83,13 @@ const Api = () => {
                                             placeholder=""
                                             type="text"
                                             className="main"
+                                            onChange={changeData}
+
                                         />
                                     </FormGroup>
                                 </Col>
                                 <Col md={6}>
-                                    <Label for="example" className="fw-600 fs-5">
+                                    <Label for="example" className="fw-600 ">
                                         Gender
                                     </Label>
                                     <div className="d-flex">
@@ -82,6 +99,8 @@ const Api = () => {
                                                 name="gender"
                                                 type="radio"
                                                 className="gender me-2"
+                                                onChange={changeData}
+                                                value="Male"
                                             />
                                             <Label
                                                 check
@@ -97,7 +116,8 @@ const Api = () => {
                                                 name="gender"
                                                 type="radio"
                                                 className="gender me-2"
-
+                                                onChange={changeData}
+                                                value="Female"
                                             />
                                             <Label
                                                 check
@@ -113,7 +133,7 @@ const Api = () => {
                                     <Label
                                         check
                                         for="example"
-                                        className="fw-600 fs-5
+                                        className="fw-600 
                                 my-2"
                                     >
                                         hobbies
@@ -125,6 +145,8 @@ const Api = () => {
                                                 name="hobbies"
                                                 type="checkbox"
                                                 className="language me-2"
+                                                onChange={changeData}
+                                                value="red"
                                             />
                                             <Label
                                                 check
@@ -140,6 +162,8 @@ const Api = () => {
                                                 name="hobbies"
                                                 type="checkbox"
                                                 className="language me-2"
+                                                onChange={changeData}
+                                                value="blue"
                                             />
                                             <Label
                                                 check
@@ -155,6 +179,8 @@ const Api = () => {
                                                 name="hobbies"
                                                 type="checkbox"
                                                 className="language me-2"
+                                                onChange={changeData}
+                                                value="black"
                                             />
                                             <Label
                                                 check
@@ -170,6 +196,8 @@ const Api = () => {
                                                 name="hobbies"
                                                 type="checkbox"
                                                 className="language me-2"
+                                                onChange={changeData}
+                                                value="yellow"
                                             />
                                             <Label
                                                 check
@@ -185,6 +213,8 @@ const Api = () => {
                                                 name="hobbies"
                                                 type="checkbox"
                                                 className="language me-2"
+                                                onChange={changeData}
+                                                value="Travelling"
                                             />
                                             <Label
                                                 check
@@ -200,6 +230,8 @@ const Api = () => {
                                                 name="hobbies"
                                                 type="checkbox"
                                                 className="language me-2"
+                                                onChange={changeData}
+                                                value="Reading"
                                             />
                                             <Label
                                                 check
@@ -215,6 +247,8 @@ const Api = () => {
                                                 name="hobbies"
                                                 type="checkbox"
                                                 className="language me-2"
+                                                onChange={changeData}
+                                                value="Exersice"
                                             />
                                             <Label
                                                 check
@@ -227,7 +261,6 @@ const Api = () => {
                                     </Row>
                                 </Col>
                             </Row>
-
                             <div className="text-center">
                                 <button className="my-2 btn btn-secondary submit fs-4">
                                     Submit
@@ -237,7 +270,9 @@ const Api = () => {
                     </Container>
                 </Col>
             </Row>
-
+            {arr?.map((x, i) => {
+                return <h4 key={i}>{x.firstName}</h4>
+            })}
         </div>
     )
 }
