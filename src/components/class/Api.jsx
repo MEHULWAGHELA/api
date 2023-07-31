@@ -1,18 +1,33 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import axios from 'axios'
-import { Col, Container, Form, FormGroup, Input, Label, Row } from 'reactstrap'
+import { Col, Container, Form, FormGroup, Input, Label, Row, Table } from 'reactstrap'
 const Api = () => {
     let [arr, setarr] = useState([])
     let [obj, setobj] = useState({})
     const setdata = () => {
-        axios.get('https://student-api.mycodelibraries.com/api/student/get')
+        axios.post('https://student-api.mycodelibraries.com/api/student/add', obj)
             .then((res) => {
-                console.log(res.data.data)
-                setarr(res.data.data)
+                axios.get('https://student-api.mycodelibraries.com/api/student/get')
+                    .then((res) => {
+                        arr = res.data.data
+                        setarr([...arr])
+                    }
+                    )
+                    .catch((err) => console.log(err))
             }
             )
             .catch((err) => console.log(err))
     }
+    useEffect(() => {
+        axios.get('https://student-api.mycodelibraries.com/api/student/get')
+            .then((res) => {
+                arr = res.data.data
+                setarr([...arr])
+            }
+            )
+            .catch((err) => console.log(err))
+    }, [])
+
     const submitFunction = (e) => {
         e.preventDefault();
         setdata()
@@ -20,7 +35,7 @@ const Api = () => {
     const changeData = (e) => {
         if (e.target.name == "hobbies") {
             if (e.target.checked) {
-                obj[e.target.name] = [e.target.value]
+                // obj[e.target.name] = [e.target.value]
             }
             else {
 
@@ -30,7 +45,6 @@ const Api = () => {
             obj[e.target.name] = e.target.value
         }
         setobj({ ...obj })
-        console.log(obj)
     }
     return (
         <div>
@@ -75,13 +89,13 @@ const Api = () => {
                                 <Col md={6}>
                                     <FormGroup>
                                         <Label for="age" className="fw-600 ">
-                                            User Name
+                                            Age
                                         </Label>
                                         <Input
                                             id="age"
                                             name="age"
                                             placeholder=""
-                                            type="text"
+                                            type="number"
                                             className="main"
                                             onChange={changeData}
 
@@ -270,9 +284,31 @@ const Api = () => {
                     </Container>
                 </Col>
             </Row>
-            {arr?.map((x, i) => {
-                return <h4 key={i}>{x.firstName}</h4>
-            })}
+            <div className="container">
+                <Table striped>
+                    <thead>
+                        <tr>
+                            <th>Sr No</th>
+                            <th>FirstName</th>
+                            <th>LastName</th>
+                            <th>Age</th>
+                            <th>gender</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {arr?.map((x, i) => {
+                            return <tr key={i}>
+                                <td>{i}</td>
+                                <td>{x.firstName}</td>
+                                <td>{x.lastName}</td>
+                                <td>{x.age}</td>
+                                <td>{x.gender}</td>
+                                {console.log(x)}
+                            </tr>
+                        })}
+                    </tbody>
+                </Table>
+            </div>
         </div>
     )
 }
